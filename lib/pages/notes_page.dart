@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/widgets/add_note.dart';
 import 'package:notes_app/widgets/custom_icon_button.dart';
 import 'package:notes_app/widgets/custom_note_item.dart';
 
@@ -27,8 +28,14 @@ class NotesPage extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: const Color(0xFF06FF1B),
+          onPressed: () {
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (context) {
+                  return const AddNote();
+                });
+          },
+          backgroundColor: const Color(0xFF2CD7EE),
           shape: const CircleBorder(),
           child: const Icon(
             Icons.add,
@@ -43,3 +50,5 @@ class NotesPage extends StatelessWidget {
             }));
   }
 }
+
+
