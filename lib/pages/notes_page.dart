@@ -30,6 +30,9 @@ class NotesPage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showModalBottomSheet<void>(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
+              // backgroundColor: Colors.lightBlue,
+              showDragHandle: true,
                 context: context,
                 builder: (context) {
                   return const AddNote();

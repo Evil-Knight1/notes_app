@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:notes_app/constants.dart';
+import 'package:notes_app/widgets/custom_text_field.dart';
 
 class AddNote extends StatelessWidget {
   const AddNote({
@@ -12,18 +15,12 @@ class AddNote extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const TextField(
-            decoration: InputDecoration(
-                hintText: 'Enter the Title', border: OutlineInputBorder()),
-          ),
-          const TextField(
-            decoration: InputDecoration(
-                hintText: 'Enter the Title', border: OutlineInputBorder()),
-          ),
+          const CustomTextWidget(hint: 'Title'),
+          const CustomTextWidget(hint: 'Description'),
           ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(),
-              child: const Text('Save')),
+              child: const SizedBox(child: const Text('Save'))),
         ],
       ),
     );
