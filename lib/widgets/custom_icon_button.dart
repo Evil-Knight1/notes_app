@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomIconButton extends StatelessWidget {
-  const CustomIconButton({super.key, required this.icon, this.tooltip, this.backgroundColor});
+  const CustomIconButton(
+      {super.key, required this.icon, this.tooltip, this.backgroundColor});
   final Icon icon;
   final String? tooltip;
   final Color? backgroundColor;
@@ -11,6 +12,7 @@ class CustomIconButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         style: IconButton.styleFrom(
             backgroundColor: backgroundColor,
+            enableFeedback: true,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16))),
         onPressed: () {},
