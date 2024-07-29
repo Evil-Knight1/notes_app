@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/widgets/custom_app_bar.dart';
 import 'package:notes_app/widgets/add_note.dart';
-import 'package:notes_app/widgets/custom_icon_button.dart';
 import 'package:notes_app/widgets/custom_note_item.dart';
 
 class NotesPage extends StatelessWidget {
@@ -8,32 +8,16 @@ class NotesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Notes',
-            style: TextStyle(fontSize: 36),
-          ),
-          actions: const [
-            CustomIconButton(
-              icon: Icon(
-                Icons.search,
-                size: 32,
-              ),
-              backgroundColor: Color(0x679E9E9E),
-              tooltip: 'Search Bar',
-            ),
-            SizedBox(
-              width: 20,
-            ),
-          ],
-        ),
+        appBar: CustomAppBar().customAppBar(title: 'Notes',icon: Icons.search),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showModalBottomSheet<void>(
-              useSafeArea: true,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),),
-              // backgroundColor: Colors.lightBlue,
-              showDragHandle: true,
+                useSafeArea: true,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                // backgroundColor: Colors.lightBlue,
+                showDragHandle: true,
                 context: context,
                 builder: (context) {
                   return const AddNote();
@@ -54,5 +38,3 @@ class NotesPage extends StatelessWidget {
             }));
   }
 }
-
-

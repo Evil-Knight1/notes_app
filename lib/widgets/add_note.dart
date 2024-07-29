@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notes_app/constants.dart';
+import 'package:notes_app/widgets/custom_text_button.dart';
 import 'package:notes_app/widgets/custom_text_field.dart';
 
 class AddNote extends StatelessWidget {
@@ -26,7 +27,7 @@ class AddNote extends StatelessWidget {
               maxLine: 5,
             ),
             SizedBox(height: 40),
-            CustomTextButton(),
+            CustomTextButton(text: 'Save',),
             SizedBox(height: 20)
           ],
         ),
@@ -35,27 +36,3 @@ class AddNote extends StatelessWidget {
   }
 }
 
-class CustomTextButton extends StatelessWidget {
-  const CustomTextButton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-      width: MediaQuery.of(context).size.width,
-      child: TextButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-              backgroundColor: kPrimaryColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8))),
-          child: const Text(
-            'Save',
-            style: TextStyle(
-                color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),
-          )),
-    );
-  }
-}

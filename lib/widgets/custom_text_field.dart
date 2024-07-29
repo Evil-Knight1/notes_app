@@ -18,7 +18,7 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           
           enabledBorder: buildBorder(),
-          hintText: 'Title',
+          hintText: hint,
           hintStyle: TextStyle(color: kPrimaryColor),
           focusedBorder: buildBorder(kPrimaryColor),
         ));
