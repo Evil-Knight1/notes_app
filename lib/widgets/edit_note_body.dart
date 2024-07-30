@@ -12,11 +12,11 @@ class EditNoteBody extends StatelessWidget {
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
         children: [
-        CustomTextField(hint: 'Edit Title'),
+        CustomTextFormField(hint: 'Edit Title'),
         SizedBox(
           height: 20,
         ),
-        CustomTextField(
+        CustomTextFormField(
           hint: 'Edit Description',
           maxLine: 5,
         ),

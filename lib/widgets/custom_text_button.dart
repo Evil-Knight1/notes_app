@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:notes_app/constants.dart';
 
 class CustomTextButton extends StatelessWidget {
-  const CustomTextButton({
-    super.key,
-    required this.text,
-  });
+  const CustomTextButton({super.key, required this.text, this.onPressed});
   final String text;
+  final void Function()? onPressed;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       width: MediaQuery.of(context).size.width,
       child: TextButton(
-          onPressed: () {},
+          onPressed: onPressed,
           style: ElevatedButton.styleFrom(
               backgroundColor: kPrimaryColor,
               shape: RoundedRectangleBorder(
