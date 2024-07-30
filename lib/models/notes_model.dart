@@ -1,8 +1,13 @@
 class NotesModel {
   final String title;
   final String desc;
-  final DateTime time;
+  final String time;
+  final int color;
 
-  NotesModel({required this.title, required this.desc, required this.time});
-  
+  NotesModel({
+    required this.title,
+    required this.desc,
+    required this.time,
+    required this.color,
+  });
 }
