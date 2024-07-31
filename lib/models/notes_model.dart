@@ -1,8 +1,6 @@
 import 'package:hive/hive.dart';
 
-
 part 'notes_model.g.dart';
-
 
 @HiveType(typeId: 0)
 class NotesModel extends HiveObject {
@@ -21,4 +19,8 @@ class NotesModel extends HiveObject {
     required this.time,
     required this.color,
   });
+  @override
+  String toString() {
+    return 'title: $title desc: $desc time: $time color: $color';
+  }
 }

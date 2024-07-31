@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:notes_app/models/notes_model.dart';
 import 'package:notes_app/pages/edit_note_page.dart';
 import 'package:notes_app/widgets/custom_icon_button.dart';
 
-class NoteItem extends StatelessWidget {
-  const NoteItem({
+class CustomNoteItem extends StatelessWidget {
+  const CustomNoteItem({
     super.key,
+    required this.note,
   });
+  final NotesModel note;
 
   @override
   Widget build(BuildContext context) {
@@ -37,23 +40,23 @@ class NoteItem extends StatelessWidget {
           color: const Color(0xffffcd7a),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: const Column(
+        child:  Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             ListTile(
-              title: const Text(
-                'Flutter Tip',
-                style: TextStyle(
+              title:  Text(
+                note.title,
+                style: const TextStyle(
                   fontSize: 26,
                   color: Colors.black,
                 ),
               ),
-              subtitle: const Padding(
-                padding: EdgeInsets.only(top: 24),
+              subtitle:  Padding(
+                padding:const EdgeInsets.only(top: 24),
                 child: Text(
-                  'Build your carer with tharwat samy',
-                  style: TextStyle(fontSize: 18, color: Colors.black45),
+                  note.desc,
+                  style:const TextStyle(fontSize: 18, color: Colors.black45),
                 ),
               ),
               trailing: const CustomIconButton(
@@ -64,11 +67,11 @@ class NoteItem extends StatelessWidget {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(right: 24),
+             Padding(
+              padding:const EdgeInsets.only(right: 24),
               child: Text(
-                '20 may 2024',
-                style: TextStyle(color: Colors.black38, fontSize: 12),
+                note.time,
+                style: const TextStyle(color: Colors.black38, fontSize: 12),
               ),
             )
           ],

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:notes_app/constants.dart';
+import 'package:notes_app/models/notes_model.dart';
 import 'package:notes_app/widgets/custom_text_button.dart';
 import 'package:notes_app/widgets/custom_text_field.dart';
 
@@ -60,9 +63,14 @@ class _AddNoteFormState extends State<AddNoteForm> {
             onPressed: () {
               if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();
+                Hive.box(kNotesBox).add(NotesModel(
+                    title: title!,
+                    desc: desc!,
+                    time: DateTime.now().toString(),
+                    color: 0123));
               } else {
-                  autovalidateMode = AutovalidateMode.always;
-                setState(() {});  
+                autovalidateMode = AutovalidateMode.always;
+                setState(() {});
               }
             },
           ),
