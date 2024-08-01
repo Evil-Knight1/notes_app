@@ -23,7 +23,7 @@ class NotesPage extends StatelessWidget {
                 showDragHandle: true,
                 context: context,
                 builder: (context) {
-                  return const AddNote();
+                  return  AddNote();
                 });
           },
           backgroundColor: const Color(0xFF2CD7EE),
