@@ -20,10 +20,11 @@ class NotesPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 // backgroundColor: Colors.lightBlue,
+                isScrollControlled: true,
                 showDragHandle: true,
                 context: context,
                 builder: (context) {
-                  return  AddNote();
+                  return AddNote();
                 });
           },
           backgroundColor: const Color(0xFF2CD7EE),
@@ -40,8 +41,10 @@ class NotesPage extends StatelessWidget {
             Box<dynamic> data = box;
             return ListView.builder(
                 itemCount: data.length,
-                itemBuilder: (context, index) =>
-                    CustomNoteItem(note: data.getAt(index)));
+                itemBuilder: (context, index) => CustomNoteItem(
+                      note: data.getAt(index),
+                      index: index,
+                    ));
           },
         ));
   }

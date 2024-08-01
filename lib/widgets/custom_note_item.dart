@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:notes_app/cubit/add_note_cubit/add_note_cubit_cubit.dart';
 import 'package:notes_app/models/notes_model.dart';
 import 'package:notes_app/pages/edit_note_page.dart';
 import 'package:notes_app/widgets/custom_icon_button.dart';
@@ -8,9 +10,10 @@ class CustomNoteItem extends StatelessWidget {
   const CustomNoteItem({
     super.key,
     required this.note,
+    required this.index,
   });
   final NotesModel note;
-
+  final int index;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -40,35 +43,37 @@ class CustomNoteItem extends StatelessWidget {
           color: const Color(0xffffcd7a),
           borderRadius: BorderRadius.circular(16),
         ),
-        child:  Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             ListTile(
-              title:  Text(
+              title: Text(
                 note.title,
                 style: const TextStyle(
                   fontSize: 26,
                   color: Colors.black,
                 ),
               ),
-              subtitle:  Padding(
-                padding:const EdgeInsets.only(top: 24),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 24),
                 child: Text(
                   note.desc,
-                  style:const TextStyle(fontSize: 18, color: Colors.black45),
+                  style: const TextStyle(fontSize: 18, color: Colors.black45),
                 ),
               ),
-              trailing: const CustomIconButton(
-                icon: Icon(
+              trailing: CustomIconButton(
+                icon: const Icon(
                   FontAwesomeIcons.trash,
                   color: Colors.black,
                   size: 24,
                 ),
+                onPressed: () =>
+                    BlocProvider.of<AddNoteCubit>(context).box.deleteAt(index),
               ),
             ),
-             Padding(
-              padding:const EdgeInsets.only(right: 24),
+            Padding(
+              padding: const EdgeInsets.only(right: 24),
               child: Text(
                 note.time,
                 style: const TextStyle(color: Colors.black38, fontSize: 12),
