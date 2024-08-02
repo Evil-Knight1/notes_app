@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:notes_app/cubit/add_note_cubit/add_note_cubit_cubit.dart';
 import 'package:notes_app/models/notes_model.dart';
 import 'package:notes_app/widgets/custom_block_color_picker.dart';
@@ -22,8 +23,8 @@ class _AddNoteFormState extends State<AddNoteForm> {
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   String? title, desc;
   Color? color;
-  DateTime now = DateTime.now();
-  String? date;
+
+  DateTime date = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -57,8 +58,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2101),
                     );
-                    setState(() => date =
-                        '${selectedDate.year} - ${selectedDate.month} - ${selectedDate.day}');
+                    setState(() => date = selectedDate);
                   },
                   icon: const Icon(Icons.calendar_month)),
               IconButton(
@@ -95,8 +95,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
                     NotesModel note = NotesModel(
                         title: title!,
                         desc: desc!,
-                        time: date ??
-                            '${DateTime.now().year} - ${DateTime.now().month} - ${DateTime.now().day}',
+                        time: DateFormat.yMd().format(date),
                         color: color!.value);
                     BlocProvider.of<AddNoteCubit>(context).addNote(note);
                   } else {
