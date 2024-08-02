@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:notes_app/cubit/add_note_cubit/add_note_cubit_cubit.dart';
+import 'package:notes_app/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notes_app/models/notes_model.dart';
 import 'package:notes_app/pages/edit_note_page.dart';
 import 'package:notes_app/widgets/custom_icon_button.dart';
@@ -40,7 +40,7 @@ class CustomNoteItem extends StatelessWidget {
         padding: const EdgeInsets.only(top: 24, bottom: 24, left: 16),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
         decoration: BoxDecoration(
-          color: const Color(0xffffcd7a),
+          color: Color(note.color),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -69,7 +69,7 @@ class CustomNoteItem extends StatelessWidget {
                   size: 24,
                 ),
                 onPressed: () =>
-                    BlocProvider.of<AddNoteCubit>(context).box.deleteAt(index),
+                    BlocProvider.of<NotesCubit>(context).deleteNote(index),
               ),
             ),
             Padding(
