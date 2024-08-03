@@ -9,15 +9,6 @@ part 'notes_state.dart';
 class NotesCubit extends Cubit<NoteState> {
   NotesCubit() : super(NotesInitial());
   var box = Hive.box<NotesModel>(kNotesBox);
-  deleteNote(int index) {
-    emit(NoteDeleteLoading());
-    try {
-      box.deleteAt(index);
-      emit(NoteDeleteSuccess());
-    } catch (e) {
-      emit(NoteDeleteFailure(errorMessage: e.toString()));
-    }
-  }
 
   editNote(int index, NotesModel note) {
     emit(NoteEditLoading());

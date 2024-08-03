@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:notes_app/widgets/custom_icon_button.dart';
 
 class CustomAppBar {
-  AppBar customAppBar({required IconData icon, required String title}) {
+  AppBar customAppBar(
+      {void Function()? onPressed,
+      IconData? icon,
+      Color? background,
+      required String title}) {
     return AppBar(
       title: Text(
         title,
@@ -14,7 +18,8 @@ class CustomAppBar {
             icon,
             size: 32,
           ),
-          backgroundColor: const Color(0x679E9E9E),
+          backgroundColor: background,
+          onPressed: onPressed ?? () {},
           tooltip: 'Search Bar',
         ),
         const SizedBox(

@@ -16,8 +16,11 @@ class NotesPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => NotesCubit(),
       child: Scaffold(
-          appBar:
-              CustomAppBar().customAppBar(title: 'Notes', icon: Icons.search),
+          appBar: CustomAppBar().customAppBar(
+              title: 'Notes',
+              icon: Icons.search,
+              background: const Color(0x639E9E9E),
+              onPressed: () {}),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               customModalBottomSheet(context);
@@ -62,10 +65,10 @@ class NotesPage extends StatelessWidget {
                           ]),
                     )
                   : ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       itemCount: data.length,
                       itemBuilder: (context, index) => CustomNoteItem(
                             note: data.getAt(index),
-                            index: index,
                           ));
             },
           )),

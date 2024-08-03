@@ -14,12 +14,4 @@ final class NoteEditFailure extends NoteState {
   final String errorMessage;
 }
 
-class NoteDeleteLoading extends NoteState {}
 
-class NoteDeleteSuccess extends NoteState {}
-
-class NoteDeleteFailure extends NoteState {
-  final String errorMessage;
-
-  NoteDeleteFailure({required this.errorMessage});
-}
