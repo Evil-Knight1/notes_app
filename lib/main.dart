@@ -12,26 +12,7 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
   Hive.registerAdapter(NotesModelAdapter());
   var box = await Hive.openBox<NotesModel>(kNotesBox);
-  box.add(NotesModel(
-      color: Colors.orangeAccent.value,
-      title: 'Notes',
-      desc: 'Notes Description',
-      time: DateFormat.yMd().format(DateTime.now())));
-  box.add(NotesModel(
-      color: Colors.orangeAccent.value,
-      title: 'Notes',
-      desc: 'Notes Description',
-      time: DateFormat.yMd().format(DateTime.now())));
-  box.add(NotesModel(
-      color: Colors.orangeAccent.value,
-      title: 'Notes',
-      desc: 'Notes Description',
-      time: DateFormat.yMd().format(DateTime.now())));
-  box.add(NotesModel(
-      color: Colors.orangeAccent.value,
-      title: 'Notes',
-      desc: 'Notes Description',
-      time: DateFormat.yMd().format(DateTime.now())));
+
   runApp(const NotesApp());
 }
 
