@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:notes_app/cubit/add_note_cubit/add_note_cubit_cubit.dart';
+import 'package:notes_app/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notes_app/models/notes_model.dart';
 import 'package:notes_app/widgets/custom_block_color_picker.dart';
 import 'package:notes_app/widgets/custom_text_button.dart';
@@ -84,7 +84,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
             ],
           ),
           const SizedBox(height: 10),
-          BlocBuilder<AddNoteCubit, AddNoteCubitState>(
+          BlocBuilder<NotesCubit, NoteState>(
             builder: (context, state) {
               return CustomTextButton(
                 isLoading: state is AddNoteLoadingState ? true : false,
@@ -93,11 +93,12 @@ class _AddNoteFormState extends State<AddNoteForm> {
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
                     NotesModel note = NotesModel(
-                        title: title!,
-                        desc: desc!,
-                        time: DateFormat.yMd().format(date),
-                        color: color?.value ?? Colors.orangeAccent.value);
-                    BlocProvider.of<AddNoteCubit>(context).addNote(note);
+                      title: title!,
+                      desc: desc!,
+                      time: DateFormat.yMd().format(date),
+                      color: color?.value ?? Colors.orangeAccent.value,
+                    );
+                    BlocProvider.of<NotesCubit>(context).addNote(note);
                   } else {
                     autovalidateMode = AutovalidateMode.always;
                     setState(() {});

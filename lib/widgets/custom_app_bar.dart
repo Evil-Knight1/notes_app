@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notes_app/widgets/custom_icon_button.dart';
 
 class CustomAppBar {
-  AppBar customAppBar(
+  static AppBar customAppBar(
       {void Function()? onPressed,
       IconData? icon,
       Color? background,

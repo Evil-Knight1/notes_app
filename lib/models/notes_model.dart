@@ -12,15 +12,18 @@ class NotesModel extends HiveObject {
   String time;
   @HiveField(3)
   int color;
+  @HiveField(4)
+  bool? fav ;
 
   NotesModel({
     required this.title,
     required this.desc,
     required this.time,
     required this.color,
+    this.fav,
   });
   @override
   String toString() {
-    return 'title: $title desc: $desc time: $time color: $color';
+    return 'title: $title , desc: $desc , time: $time , color: $color , fav: $fav ';
   }
 }

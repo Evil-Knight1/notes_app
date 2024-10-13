@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:notes_app/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notes_app/models/notes_model.dart';
 import 'package:notes_app/pages/edit_note_page.dart';
 import 'package:notes_app/widgets/custom_icon_button.dart';
@@ -8,8 +10,10 @@ class CustomNoteItem extends StatefulWidget {
   const CustomNoteItem({
     super.key,
     required this.note,
+    this.favScreen = false,
   });
   final NotesModel note;
+  final bool favScreen;
 
   @override
   State<CustomNoteItem> createState() => _CustomNoteItemState();
@@ -37,35 +41,17 @@ class _CustomNoteItemState extends State<CustomNoteItem> {
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
           widget.note.delete();
+          context.read<NotesCubit>().fetchNotes();
         } else {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => EditNotePage(note: widget.note)));
         }
-        setState(() {});
       },
       child: InkWell(
         onTap: () {
-          Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, _, __) => EditNotePage(
-                  note: widget.note,
-                ),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  const begin = Offset(0.0, 1.0);
-                  const end = Offset.zero;
-                  final tween = Tween(begin: begin, end: end);
-                  final offsetAnimation = animation.drive(tween);
-
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: child,
-                  );
-                },
-              ));
+          navToEditNotePage(context);
         },
         child: Container(
           padding: const EdgeInsets.only(top: 24, bottom: 24, left: 16),
@@ -94,12 +80,18 @@ class _CustomNoteItemState extends State<CustomNoteItem> {
                   ),
                 ),
                 trailing: CustomIconButton(
-                  icon: const Icon(
-                    FontAwesomeIcons.trash,
-                    color: Colors.black,
+                  icon: Icon(
+                    widget.note.fav!
+                        ? FontAwesomeIcons.solidHeart
+                        : FontAwesomeIcons.heart,
+                    color: widget.note.fav! ? Colors.red : Colors.black,
                     size: 24,
                   ),
-                  onPressed: () => widget.note.delete(),
+                  onPressed: () {
+                    setState(() => widget.note.fav = !widget.note.fav!);
+                    widget.note.save();
+                    BlocProvider.of<NotesCubit>(context).fetchNotes();
+                  },
                 ),
               ),
               Padding(
@@ -114,5 +106,30 @@ class _CustomNoteItemState extends State<CustomNoteItem> {
         ),
       ),
     );
+  }
+
+  void navToEditNotePage(BuildContext context) {
+    Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, _, __) => EditNotePage(
+            note: widget.note,
+          ),
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child) {
+            const Offset begin = Offset(0.0, 1.0);
+            const Offset end = Offset.zero;
+            final Tween<Offset> tween = Tween<Offset>(begin: begin, end: end);
+            final Animation<Offset> offsetAnimation =
+                animation.drive<Offset>(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        ));
   }
 }
