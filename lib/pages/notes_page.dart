@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notes_app/models/notes_model.dart';
-import 'package:notes_app/pages/fav_notes_page.dart';
-import 'package:notes_app/pages/settings_page.dart';
-import 'package:notes_app/widgets/custom_app_bar.dart';
-import 'package:notes_app/widgets/add_note.dart';
+import 'package:notes_app/widgets/custom_drawer.dart';
+import 'package:notes_app/widgets/custom_floating_action_button.dart';
 import 'package:notes_app/widgets/custom_icon_button.dart';
 import 'package:notes_app/widgets/custom_note_item.dart';
 import 'package:notes_app/widgets/custom_text_button.dart';
@@ -34,9 +32,80 @@ class _NotesPageState extends State<NotesPage> {
         .where((note) =>
             note.title.toLowerCase().contains(searchedNote.toLowerCase()))
         .toList();
-    print(searchedNotes);
-    print(notes.length);
+
     setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          leading: _isSearching
+              ? BackButton(
+                  onPressed: () {
+                    setState(() {
+                      _controller.clear();
+                      _isSearching = false;
+                    });
+                    Navigator.pop(context);
+                  },
+                )
+              : null,
+          title: _isSearching
+              ? SearchField(
+                  controller: _controller,
+                  hint: 'Find Characters',
+                  onChanged: (searchedNote) {
+                    addSearchedForItemsToSearchedList(searchedNote);
+                  },
+                )
+              : _buildAppBarTitle(),
+          actions: _buildAppBarActions(),
+        ),
+        drawer: const CustomDrawer(),
+        floatingActionButton: const CustomFloatingActionButton(),
+        body: BlocBuilder<NotesCubit, NoteState>(
+          builder: (context, state) {
+            notes = context.read<NotesCubit>().notes;
+            return notes.isEmpty
+                ? SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'No Notes To Show',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * .5,
+                            child: CustomTextButton(
+                              text: 'Add Note',
+                              onPressed: () => CustomFloatingActionButton
+                                  .customModalBottomSheet(context),
+                            ),
+                          ),
+                        ]),
+                  )
+                : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: _isSearching && _controller.text.isNotEmpty
+                        ? searchedNotes.length
+                        : notes.length,
+                    itemBuilder: (context, index) => CustomNoteItem(
+                          note: _isSearching && _controller.text.isNotEmpty
+                              ? searchedNotes[index]
+                              : notes[index],
+                        ));
+          },
+        ));
   }
 
   Widget _buildAppBarTitle() {
@@ -94,151 +163,5 @@ class _NotesPageState extends State<NotesPage> {
     setState(() {
       _isSearching = false;
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: _isSearching
-              ? BackButton(
-                  onPressed: () {
-                    setState(() {
-                      _controller.clear();
-                      _isSearching = false;
-                    });
-                    Navigator.pop(context);
-                  },
-                )
-              : null,
-          title: _isSearching
-              ? SearchField(
-                  controller: _controller,
-                  hint: 'Find Characters',
-                  onChanged: (searchedNote) {
-                    addSearchedForItemsToSearchedList(searchedNote);
-                  },
-                )
-              : _buildAppBarTitle(),
-          actions: _buildAppBarActions(),
-        ),
-        drawer: const CustomDrawer(),
-        floatingActionButton: customFloatingActionButton(context),
-        body: BlocBuilder<NotesCubit, NoteState>(
-          builder: (context, state) {
-            notes = context.read<NotesCubit>().notes;
-            return notes.isEmpty
-                ? SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'No Notes To Show',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 32,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * .5,
-                            child: CustomTextButton(
-                              text: 'Add Note',
-                              onPressed: () => customModalBottomSheet(context),
-                            ),
-                          ),
-                        ]),
-                  )
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: _isSearching && _controller.text.isNotEmpty
-                        ? searchedNotes.length
-                        : notes.length,
-                    itemBuilder: (context, index) => CustomNoteItem(
-                          note: _isSearching && _controller.text.isNotEmpty
-                              ? searchedNotes[index]
-                              : notes[index],
-                        ));
-          },
-        ));
-  }
-
-  FloatingActionButton customFloatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        customModalBottomSheet(context);
-      },
-      backgroundColor: const Color(0xFF2CD7EE),
-      shape: const CircleBorder(),
-      child: const Icon(
-        Icons.add,
-        size: 32,
-        color: Colors.black,
-      ),
-    );
-  }
-
-  Future<void> customModalBottomSheet(BuildContext context) {
-    return showModalBottomSheet<void>(
-        useSafeArea: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        // backgroundColor: Colors.lightBlue,
-        isScrollControlled: true,
-        showDragHandle: true,
-        context: context,
-        builder: (context) {
-          return const AddNoteBottomSheet();
-        });
-  }
-}
-
-class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: const EdgeInsets.all(0),
-        children: [
-          const SizedBox(
-            height: 100,
-            child: ListTile(
-              tileColor: Colors.amber,
-              textColor: Colors.white,
-              title: Center(
-                  child: Text(
-                'Notes App',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              )),
-            ),
-          ),
-          const ListTile(
-            leading: Icon(Icons.note),
-            title: Text('Home'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.favorite),
-            title: const Text('Favorite'),
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const FavNotesPage())),
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('settings'),
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SettingsPage())),
-          ),
-        ],
-      ),
-    );
   }
 }
