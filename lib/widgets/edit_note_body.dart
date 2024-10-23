@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes_app/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notes_app/models/notes_model.dart';
 import 'package:notes_app/widgets/custom_text_button.dart';
 import 'package:notes_app/widgets/custom_text_field.dart';
@@ -49,9 +51,12 @@ class _EditNoteBodyState extends State<EditNoteBody> {
                 if (formKey.currentState!.validate()) {
                   formKey.currentState!.save();
                   widget.note.save();
+                  BlocProvider.of<NotesCubit>(context).fetchNotes();
                   setState(() {});
-                  ScaffoldMessenger.of(context).
-                  showSnackBar(const SnackBar(content: Text('Edited Done',)));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                    'Edited Done',
+                  )));
                   Navigator.pop(context);
                 } else {
                   autovalidateMode = AutovalidateMode.always;

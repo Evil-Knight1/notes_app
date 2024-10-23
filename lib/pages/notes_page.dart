@@ -6,8 +6,10 @@ import 'package:notes_app/pages/fav_notes_page.dart';
 import 'package:notes_app/pages/settings_page.dart';
 import 'package:notes_app/widgets/custom_app_bar.dart';
 import 'package:notes_app/widgets/add_note.dart';
+import 'package:notes_app/widgets/custom_icon_button.dart';
 import 'package:notes_app/widgets/custom_note_item.dart';
 import 'package:notes_app/widgets/custom_text_button.dart';
+import 'package:notes_app/widgets/search_field.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({super.key});
@@ -19,24 +21,112 @@ class NotesPage extends StatefulWidget {
 class _NotesPageState extends State<NotesPage> {
   @override
   void initState() {
-  
     context.read<NotesCubit>().fetchNotes();
     super.initState();
+  }
+
+  bool _isSearching = false;
+  List<NotesModel> notes = [];
+  List<NotesModel> searchedNotes = [];
+  final TextEditingController _controller = TextEditingController();
+  void addSearchedForItemsToSearchedList(String searchedNote) {
+    searchedNotes = notes
+        .where((note) =>
+            note.title.toLowerCase().contains(searchedNote.toLowerCase()))
+        .toList();
+    print(searchedNotes);
+    print(notes.length);
+    setState(() {});
+  }
+
+  Widget _buildAppBarTitle() {
+    return const Text(
+      'Notes',
+      style: TextStyle(fontSize: 36),
+    );
+  }
+
+  List<Widget> _buildAppBarActions() {
+    if (_isSearching) {
+      return [
+        IconButton(
+          onPressed: () {
+            if (_controller.text != "") {
+              _controller.clear();
+              setState(() {});
+            } else {
+              _isSearching = false;
+              setState(() {});
+              Navigator.pop(context);
+            }
+          },
+          icon: const Icon(Icons.clear),
+        ),
+      ];
+    } else {
+      return [
+        CustomIconButton(
+          icon: const Icon(
+            Icons.search,
+            size: 32,
+          ),
+          backgroundColor: const Color(0x639E9E9E),
+          onPressed: () => _startSearch(),
+          tooltip: 'Search Bar',
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+      ];
+    }
+  }
+
+  void _startSearch() {
+    ModalRoute.of(context)!
+        .addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearch));
+    setState(() {
+      _isSearching = true;
+    });
+  }
+
+  void _stopSearch() {
+    _controller.clear();
+    setState(() {
+      _isSearching = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar.customAppBar(
-            title: 'Notes',
-            icon: Icons.search,
-            background: const Color(0x639E9E9E),
-            onPressed: () {}),
+        appBar: AppBar(
+          leading: _isSearching
+              ? BackButton(
+                  onPressed: () {
+                    setState(() {
+                      _controller.clear();
+                      _isSearching = false;
+                    });
+                    Navigator.pop(context);
+                  },
+                )
+              : null,
+          title: _isSearching
+              ? SearchField(
+                  controller: _controller,
+                  hint: 'Find Characters',
+                  onChanged: (searchedNote) {
+                    addSearchedForItemsToSearchedList(searchedNote);
+                  },
+                )
+              : _buildAppBarTitle(),
+          actions: _buildAppBarActions(),
+        ),
         drawer: const CustomDrawer(),
         floatingActionButton: customFloatingActionButton(context),
         body: BlocBuilder<NotesCubit, NoteState>(
           builder: (context, state) {
-            List<NotesModel> notes = context.read<NotesCubit>().notes;
+            notes = context.read<NotesCubit>().notes;
             return notes.isEmpty
                 ? SizedBox(
                     width: double.infinity,
@@ -65,9 +155,13 @@ class _NotesPageState extends State<NotesPage> {
                   )
                 : ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    itemCount: notes.length,
+                    itemCount: _isSearching && _controller.text.isNotEmpty
+                        ? searchedNotes.length
+                        : notes.length,
                     itemBuilder: (context, index) => CustomNoteItem(
-                          note: notes[index],
+                          note: _isSearching && _controller.text.isNotEmpty
+                              ? searchedNotes[index]
+                              : notes[index],
                         ));
           },
         ));
@@ -113,14 +207,20 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
+        padding: const EdgeInsets.all(0),
         children: [
-          const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: CircleAvatar(
-                backgroundColor: Colors.redAccent,
+          const SizedBox(
+            height: 100,
+            child: ListTile(
+              tileColor: Colors.amber,
+              textColor: Colors.white,
+              title: Center(
+                  child: Text(
+                'Notes App',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               )),
+            ),
+          ),
           const ListTile(
             leading: Icon(Icons.note),
             title: Text('Home'),

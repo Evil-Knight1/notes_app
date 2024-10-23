@@ -6,7 +6,7 @@ class CustomAppBar {
       {void Function()? onPressed,
       IconData? icon,
       Color? background,
-      required String title}) {
+      required String title, List<Widget>? action}) {
     return AppBar(
       title: Text(
         title,

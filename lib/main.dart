@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notes_app/constants.dart';
 import 'package:notes_app/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notes_app/models/notes_model.dart';
-import 'package:notes_app/pages/notes_page.dart';
+import 'package:notes_app/pages/splash_screen.dart';
 import 'package:notes_app/service/setting_service.dart';
 import 'package:notes_app/simple_bloc_observer.dart';
 
@@ -35,13 +35,15 @@ class NotesApp extends StatelessWidget {
       child: BlocBuilder<NotesCubit, NoteState>(
         builder: (context, state) {
           return MaterialApp(
+            themeAnimationCurve: Curves.easeIn,
+            themeAnimationDuration: const Duration(milliseconds: 250),
             debugShowCheckedModeBanner: false,
             themeMode: SettingsService.loadThemeMode()!
                 ? ThemeMode.dark
                 : ThemeMode.light,
             darkTheme: ThemeData.dark(),
             theme: ThemeData.light().copyWith(),
-            home: const NotesPage(),
+            home: const SplashScreen(),
           );
         },
       ),
