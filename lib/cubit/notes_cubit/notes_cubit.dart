@@ -8,22 +8,20 @@ part 'notes_state.dart';
 
 class NotesCubit extends Cubit<NoteState> {
   NotesCubit() : super(NotesInitial());
-  var box = Hive.box<NotesModel>(kNotesBox);
+  final _box = Hive.box<NotesModel>(kNotesBox);
   List<NotesModel> notes = [];
 
   void fetchNotes() async {
     notes.clear();
-    var data = box.listenable().value;
-    for (int i = 0; i < data.length; i++) {
-      notes.add(box.getAt(i)!);
-    }
+    notes =_box.values.toList(); // Get all values from the Hive box
+
     emit(NotesFetchSuccess());
   }
 
   addNote(NotesModel note) async {
     emit(AddNoteLoadingState());
     try {
-      await box.add(note);
+      await _box.add(note);
       emit(AddNoteSuccessState());
       fetchNotes();
     } on Exception catch (e) {
@@ -35,12 +33,16 @@ class NotesCubit extends Cubit<NoteState> {
     editNote(int index, NotesModel note) {
       emit(NoteEditLoading());
       try {
-        box.putAt(index, note);
+        _box.putAt(index, note);
         emit(NoteEditSuccess());
         fetchNotes();
       } catch (e) {
         emit(NoteEditFailure(errorMessage: e.toString()));
       }
     }
+  }
+
+  changeTheme() {
+    emit(ThemeToggled());
   }
 }

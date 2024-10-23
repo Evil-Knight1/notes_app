@@ -47,6 +47,7 @@ class _CustomNoteItemState extends State<CustomNoteItem> {
               context,
               MaterialPageRoute(
                   builder: (context) => EditNotePage(note: widget.note)));
+          BlocProvider.of<NotesCubit>(context).fetchNotes();
         }
       },
       child: InkWell(

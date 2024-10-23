@@ -5,6 +5,7 @@ import 'package:notes_app/constants.dart';
 import 'package:notes_app/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notes_app/models/notes_model.dart';
 import 'package:notes_app/pages/notes_page.dart';
+import 'package:notes_app/service/setting_service.dart';
 import 'package:notes_app/simple_bloc_observer.dart';
 
 void main() async {
@@ -20,6 +21,7 @@ void main() async {
       }
     }
   });
+  await Hive.openBox<bool>(kUserSettings);
   runApp(const NotesApp());
 }
 
@@ -30,10 +32,18 @@ class NotesApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => NotesCubit(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(brightness: Brightness.dark, fontFamily: 'Poppins'),
-        home: const NotesPage(),
+      child: BlocBuilder<NotesCubit, NoteState>(
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            themeMode: SettingsService.loadThemeMode()!
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            darkTheme: ThemeData.dark(),
+            theme: ThemeData.light().copyWith(),
+            home: const NotesPage(),
+          );
+        },
       ),
     );
   }

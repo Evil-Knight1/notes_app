@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes_app/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notes_app/models/notes_model.dart';
 import 'package:notes_app/pages/fav_notes_page.dart';
+import 'package:notes_app/pages/settings_page.dart';
 import 'package:notes_app/widgets/custom_app_bar.dart';
 import 'package:notes_app/widgets/add_note.dart';
 import 'package:notes_app/widgets/custom_note_item.dart';
@@ -18,6 +19,7 @@ class NotesPage extends StatefulWidget {
 class _NotesPageState extends State<NotesPage> {
   @override
   void initState() {
+  
     context.read<NotesCubit>().fetchNotes();
     super.initState();
   }
@@ -30,43 +32,8 @@ class _NotesPageState extends State<NotesPage> {
             icon: Icons.search,
             background: const Color(0x639E9E9E),
             onPressed: () {}),
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              const DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.redAccent,
-                  )),
-              const ListTile(
-                leading: Icon(Icons.note),
-                title: Text('Home'),
-              ),
-              ListTile(
-                leading: const Icon(Icons.favorite),
-                title: const Text('Favorite'),
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const FavNotesPage())),
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            customModalBottomSheet(context);
-          },
-          backgroundColor: const Color(0xFF2CD7EE),
-          shape: const CircleBorder(),
-          child: const Icon(
-            Icons.add,
-            size: 32,
-            color: Colors.black,
-          ),
-        ),
+        drawer: const CustomDrawer(),
+        floatingActionButton: customFloatingActionButton(context),
         body: BlocBuilder<NotesCubit, NoteState>(
           builder: (context, state) {
             List<NotesModel> notes = context.read<NotesCubit>().notes;
@@ -106,6 +73,21 @@ class _NotesPageState extends State<NotesPage> {
         ));
   }
 
+  FloatingActionButton customFloatingActionButton(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        customModalBottomSheet(context);
+      },
+      backgroundColor: const Color(0xFF2CD7EE),
+      shape: const CircleBorder(),
+      child: const Icon(
+        Icons.add,
+        size: 32,
+        color: Colors.black,
+      ),
+    );
+  }
+
   Future<void> customModalBottomSheet(BuildContext context) {
     return showModalBottomSheet<void>(
         useSafeArea: true,
@@ -119,5 +101,44 @@ class _NotesPageState extends State<NotesPage> {
         builder: (context) {
           return const AddNoteBottomSheet();
         });
+  }
+}
+
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        children: [
+          const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: CircleAvatar(
+                backgroundColor: Colors.redAccent,
+              )),
+          const ListTile(
+            leading: Icon(Icons.note),
+            title: Text('Home'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.favorite),
+            title: const Text('Favorite'),
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const FavNotesPage())),
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('settings'),
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SettingsPage())),
+          ),
+        ],
+      ),
+    );
   }
 }

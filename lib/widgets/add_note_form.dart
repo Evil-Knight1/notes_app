@@ -95,6 +95,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
                     NotesModel note = NotesModel(
                       title: title!,
                       desc: desc!,
+                      fav: false,
                       time: DateFormat.yMd().format(date),
                       color: color?.value ?? Colors.orangeAccent.value,
                     );

@@ -16,6 +16,8 @@ final class NoteEditFailure extends NoteState {
   final String errorMessage;
 }
 
+final class ThemeToggled extends NoteState {}
+
 final class AddNoteCubitInitial extends NoteState {}
 
 class AddNoteLoadingState extends NoteState {}
