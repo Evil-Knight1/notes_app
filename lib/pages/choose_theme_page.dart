@@ -15,9 +15,7 @@ class ChooseThemePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Card(
-              color: Colors.white,
               child: ListTile(
-                leading: const Icon(Icons.palette),
                 title: const Text('Light Theme'),
                 onTap: () {
                   SettingsService.saveThemeMode(false);
@@ -32,12 +30,7 @@ class ChooseThemePage extends StatelessWidget {
               height: 10,
             ),
             Card(
-              color: Colors.black,
               child: ListTile(
-                leading: const Icon(
-                  Icons.palette,
-                  color: Colors.white,
-                ),
                 title: const Text(
                   'Dark Theme',
                   style: TextStyle(color: Colors.white),

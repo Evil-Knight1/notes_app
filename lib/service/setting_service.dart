@@ -11,7 +11,8 @@ class SettingsService {
 
   // Retrieve theme preference
   static bool? loadThemeMode() {
-    return _box.get('isDarkMode',
-        defaultValue: false); // default to light mode (false)
+    return _box.get(
+      'isDarkMode',
+    ); // default to light mode (false)
   }
 }

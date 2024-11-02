@@ -34,16 +34,18 @@ class NotesApp extends StatelessWidget {
       create: (context) => NotesCubit(),
       child: BlocBuilder<NotesCubit, NoteState>(
         builder: (context, state) {
-          return MaterialApp(
-            themeAnimationCurve: Curves.easeIn,
-            themeAnimationDuration: const Duration(milliseconds: 250),
-            debugShowCheckedModeBanner: false,
-            themeMode: SettingsService.loadThemeMode()!
-                ? ThemeMode.dark
-                : ThemeMode.light,
-            darkTheme: ThemeData.dark(),
-            theme: ThemeData.light().copyWith(),
-            home: const SplashScreen(),
+          return SafeArea(
+            child: MaterialApp(
+              themeAnimationCurve: Curves.easeIn,
+              themeAnimationDuration: const Duration(milliseconds: 250),
+              debugShowCheckedModeBanner: false,
+              themeMode: SettingsService.loadThemeMode()!
+                  ? ThemeMode.dark
+                  : ThemeMode.light,
+              darkTheme: ThemeData.dark(),
+              theme: ThemeData.light().copyWith(),
+              home: const SplashScreen(),
+            ),
           );
         },
       ),

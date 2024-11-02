@@ -54,7 +54,7 @@ class _NotesPageState extends State<NotesPage> {
           title: _isSearching
               ? SearchField(
                   controller: _controller,
-                  hint: 'Find Characters',
+                  hint: 'Find Note',
                   onChanged: (searchedNote) {
                     addSearchedForItemsToSearchedList(searchedNote);
                   },

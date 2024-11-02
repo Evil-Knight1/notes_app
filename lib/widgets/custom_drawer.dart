@@ -14,7 +14,7 @@ class CustomDrawer extends StatelessWidget {
         padding: const EdgeInsets.all(0),
         children: [
           const SizedBox(
-            height: 100,
+            height: 150,
             child: ListTile(
               tileColor: Colors.amber,
               textColor: Colors.white,
